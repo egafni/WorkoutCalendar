@@ -1,0 +1,16 @@
+#menu-bar p, #menu-bar a {
+    color: white;
+    -webkit-text-shadow: none;
+    text-shadow: none;
+}
+
+.container-full {
+  margin: 0 auto;
+  width: 100%;
+}
+
+form textarea {
+     width: 600px;
+     height: 400px;
+     max-width: 600px;
+}
