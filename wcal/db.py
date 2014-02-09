@@ -27,8 +27,8 @@ def get_session(engine_url=None, echo=False):
 class Base(declarative_base()):
     __abstract__ = True
     exclude_from_dict = []
-    def attrs_as_dict(self):
-        l = [(c.name, getattr(self, c.name)) for c in self.__table__.columns if c.name != 'id' and c.name not in self.exclude_from_dict]
+    def to_dict(self):
+        l = [(c.name, getattr(self, c.name)) for c in self.__table__.columns if c.name not in self.exclude_from_dict]
         return OrderedDict(l)
 
     @property
