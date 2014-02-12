@@ -5,6 +5,7 @@ from .forms import EventForm
 import datetime
 import dateutil.parser
 
+
 def gen_bprint(session):
     bprint = Blueprint('workout_calendar', __name__, template_folder='templates', static_folder='static')
 
@@ -24,22 +25,21 @@ def gen_bprint(session):
 
     @bprint.route('/event/add/', methods=['POST', 'GET'])
     def event_add():
-        form = EventForm()
-        if form.validate_on_submit():
-            d = {field.label.text: field.data for field in form}
+        form = EventForm(request.form)
+        if request.method == 'POST' and form.validate():
+            d = {field.label.text: field.data for field in form if field.label.text != 'Csrf Token'}
             s = Event(**d)
             session.add(s)
             session.commit()
             flash('Added %s' % s)
             return redirect(url_for("workout_calendar.index"))
-
         else:
-            start = request.args.get('start')
-            if start:
-                timenow = datetime.datetime.now().replace(second=0,microsecond=0).time()
-                start = datetime.datetime.combine(dateutil.parser.parse(start),timenow)
+            if request.form.get('start') is None:
+                start = request.args.get('start')
+                timenow = datetime.datetime.now().replace(second=0, microsecond=0).time()
+                start = datetime.datetime.combine(dateutil.parser.parse(start), timenow)
                 #start = dateutil.parser.parse(start)
-            form = EventForm(request.form, start=start)
+                form.start.data = start
             return render_template("event_add.html", form=form)
 
 

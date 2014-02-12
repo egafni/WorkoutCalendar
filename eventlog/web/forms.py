@@ -10,11 +10,11 @@
 #
 #     exclude = ['created_on']
 
-from flask_wtf import Form
 from wtforms import TextField, TextAreaField
-from wtforms.validators import DataRequired
+from wtforms import validators
+from wtforms import Form
 
 class EventForm(Form):
-    start = TextField('start', validators=[DataRequired()])
-    name = TextField('name', validators=[DataRequired()])
-    text = TextAreaField('text', validators=[DataRequired()])
+    start = TextField('start', validators=[validators.Required()])
+    name = TextField('name', validators=[validators.Required()])
+    text = TextAreaField('text', validators=[validators.Required()])

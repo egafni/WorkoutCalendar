@@ -11,9 +11,7 @@
 <form method="POST" action=".">
     <dl class="dl-horizontal">
         {% for field in form %}
-        {% if field.label.text != 'Csrf Token' %}
         {{ render_field(field) }}
-        {% endif %}
         {% endfor %}
     </dl>
 
