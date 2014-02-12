@@ -10,7 +10,6 @@
 }
 
 form textarea {
-     width: 600px;
+     width: 90%;
      height: 400px;
-     max-width: 600px;
 }

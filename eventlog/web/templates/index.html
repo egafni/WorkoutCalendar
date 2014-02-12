@@ -22,13 +22,13 @@
             }
         ],
         dayClick: function (date, allDay, jsEvent, view) {
-            window.location = "{{ url_for('workout_calendar.add_workout_session' ) }}?start=" + date.format()
+            window.location = "{{ url_for('workout_calendar.event_add' ) }}?start=" + date.format()
         },
         eventClick: function (calEvent, jsEvent, view) {
-            window.location = "{{ url_for('workout_calendar.edit_workout_session')}}?id=" + calEvent.id
+            window.location = "{{ url_for('workout_calendar.event_edit')}}?id=" + calEvent.id
         },
         eventDrop: function (event, revertFunc) {
-            window.location = "{{ url_for('workout_calendar.copy_workout_session')}}?id=" + event.id + "&new_start=" + event.start.format()
+            window.location = "{{ url_for('workout_calendar.event_copy')}}?id=" + event.id + "&new_start=" + event.start.format()
 
         }
 

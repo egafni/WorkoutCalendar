@@ -3,13 +3,13 @@ from sqlalchemy.orm import scoped_session, sessionmaker, mapper
 from sqlalchemy.ext.declarative import declarative_base
 from collections import OrderedDict
 from sqlalchemy import inspect
-from sqlalchemy.engine import Engine
 
 import os, sys
 
 def get_session(engine_url=None, echo=False):
+    from . import settings
     if engine_url is None:
-        engine_url = 'postgresql://egafni:lqsym@localhost/workout_calendar'
+        engine_url = settings['database_url']
     engine = create_engine(engine_url, echo=echo)
     Session = sessionmaker(autocommit=False,
                            autoflush=False,

@@ -8,7 +8,7 @@
     <meta name="author" content="">
     <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
 
-    <title>Workout Calendar</title>
+    <title>Event Journal</title>
 
     <!-- Bootstrap core CSS -->
     <link href="{{ url_for('static', filename='bootstrap3/css/bootstrap.css') }}" rel="stylesheet">
@@ -35,12 +35,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">Workout Calendar</a>
+            <a class="navbar-brand" href="/">Event Journal</a>
         </div>
         <div class="navbar-collapse collapse">
             <p class="navbar-text navbar-right">:)</p>
             <ul class="nav navbar-nav">
-                <li class="active"><a href="http://cosmos-workflow.rtfd.org/" target="_blank">Documentation</a></li>
+                <li class="active"><a href="#" target="_blank">Documentation</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Links <b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -67,51 +67,49 @@
 {% endwith %}
 
 
-<div class="row">
-    <div class="col-md-1">
-    </div>
-    <div class="col-md-10">
-        {% block content %}
+<div class="container">
+    {% block content %}
 
-        {% endblock %}
-    </div>
-    <div class="col-md-1">
-    </div>
+    {% endblock %}
+</div>
 
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="{{ url_for('static', filename='fullcalendar/lib/jquery.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='fullcalendar/lib/jquery-ui.custom.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap3/js/bootstrap.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='jquery.dataTables.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='datatables/assets/js/datatables.js') }}"></script>
-    <script src="{{ url_for('static', filename='moment.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='fullcalendar/fullcalendar.js') }}"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('.datatable').dataTable({
-                "sPaginationType": "bs_normal",
-                "bLengthChange": false,
-                "iDisplayLength": 25
-            });
-            $('.datatable').each(function () {
-                var datatable = $(this);
-                // SEARCH - Add the placeholder for Search and Turn this into in-line form control
-                var search_input = datatable.closest('.dataTables_wrapper').find('div[id$=_filter] input');
-                search_input.attr('placeholder', 'Search');
-                search_input.addClass('form-control input-sm');
-                // LENGTH - Inline-Form control
-                var length_sel = datatable.closest('.dataTables_wrapper').find('div[id$=_length] select');
-                length_sel.addClass('form-control input-sm');
-                datatable.bind('page', function (e) {
-                    window.console && console.log('pagination event:', e) //this event must be fired whenever you paginate
-                });
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="{{ url_for('static', filename='fullcalendar/lib/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='fullcalendar/lib/jquery-ui.custom.min.js') }}"></script>
+<script src="{{ url_for('static', filename='bootstrap3/js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='jquery.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='datatables/assets/js/datatables.js') }}"></script>
+<script src="{{ url_for('static', filename='moment.min.js') }}"></script>
+<script src="{{ url_for('static', filename='fullcalendar/fullcalendar.js') }}"></script>
+<script src="{{ url_for('static', filename='jquery.ui.touch-punch.min.js') }}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.datatable').dataTable({
+            "sPaginationType": "bs_normal",
+            "bLengthChange": false,
+            "iDisplayLength": 25
+        });
+        $('.datatable').each(function () {
+            var datatable = $(this);
+            // SEARCH - Add the placeholder for Search and Turn this into in-line form control
+            var search_input = datatable.closest('.dataTables_wrapper').find('div[id$=_filter] input');
+            search_input.attr('placeholder', 'Search');
+            search_input.addClass('form-control input-sm');
+            // LENGTH - Inline-Form control
+            var length_sel = datatable.closest('.dataTables_wrapper').find('div[id$=_length] select');
+            length_sel.addClass('form-control input-sm');
+            datatable.bind('page', function (e) {
+                window.console && console.log('pagination event:', e) //this event must be fired whenever you paginate
             });
         });
-    </script>
-    {% block script %}
-    {% endblock %}
+    });
+</script>
+{% block script %}
+{% endblock %}
+<footer>
+</footer>
 </body>
 </html>

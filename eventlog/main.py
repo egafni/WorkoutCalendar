@@ -3,9 +3,10 @@ from . import web, db
 
 def shell():
     import IPython
+    from .web import session
     from . import *
-    from .db import get_session
-    session=get_session()
+    events = session.query(Event).all()
+    e = events[0]
     IPython.embed()
 
 
