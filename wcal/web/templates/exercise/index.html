@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% from "_macros.html" import render_field %}
+
+{% block content %}
+
+<ul class="breadcrumb">
+    <li><a href="{{ url_for('.index') }}">Home</a></li>
+    <li class="active">Movement Index</li>
+</ul>
+<p>
+{% for ex in movements %}
+    <a href="{{ ex.url }}">{{ ex }}</a> <br/>
+{% endfor %}
+</p>
+
+{% endblock %}

@@ -1,8 +1,66 @@
 #!/usr/bin/env python
-from eventlog import main
+
+def parse_args():
+    import argparse
+    from flask_failsafe import failsafe
+
+    @failsafe
+    def load():
+        from wcal.app import flask_app
+        from wcal.web import filters
+        from wcal.web.views import bprint
+        filters.add_to_bprint(bprint)
+        flask_app.register_blueprint(bprint)
+
+        return flask_app
+    fapp = load()
+    from wcal import app
+
+    def shell():
+        import IPython
+        session = fapp.db.session
+        from wcal import Workout
+        events = session.query(Workout).all()
+        e = events[0]
+        IPython.embed()
+
+    parser = argparse.ArgumentParser(prog='WorkoutCalendar', description=__doc__,
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    sps = parser.add_subparsers()
+
+    sp = sps.add_parser('initdb', help=app.db.create_all.__doc__)
+    sp.set_defaults(func=app.db.create_all)
+
+    sp = sps.add_parser('resetdb', help=app.reset_db.__doc__)
+    sp.set_defaults(func=app.reset_db)
+
+    sp = sps.add_parser('shell', help=shell.__doc__)
+    sp.set_defaults(func=shell)
+
+    sp = sps.add_parser('runweb', help=app.runweb.__doc__)
+    sp.add_argument('-p', '--port', type=int, default=4848,
+                    help='port to bind the server to')
+    sp.add_argument('-H', '--host', default='localhost',
+                    help='host to bind the server to')
+
+    sp.set_defaults(func=app.runweb)
+
+    args = parser.parse_args()
+    kwargs = dict(args._get_kwargs())
+    del kwargs['func']
+
+    debug = kwargs.pop('debug', False)
+    if debug:
+        import ipdb
+
+        with ipdb.launch_ipdb_on_exception():
+            args.func(**kwargs)
+    else:
+        args.func(**kwargs)
+
 
 if __name__ == '__main__':
     try:
-        main.parse_args()
+        parse_args()
     except KeyboardInterrupt:
         print "Interrupted, exiting."

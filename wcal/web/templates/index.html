@@ -15,20 +15,20 @@
         editable: true,
         dragOpacity:{'default':.9},
         eventSources: [
-            { url: "{{ url_for('workout_calendar.events')}}",
+            { url: "{{ url_for('wcal.events')}}",
                 error: function () {
                     alert('there was an error while fetching events!');
                 }
             }
         ],
         dayClick: function (date, allDay, jsEvent, view) {
-            window.location = "{{ url_for('workout_calendar.event_add' ) }}?start=" + date.format()
+            window.location = "{{ url_for('wcal.workout_add' ) }}?start=" + date.format()
         },
         eventClick: function (calEvent, jsEvent, view) {
-            window.location = "{{ url_for('workout_calendar.event_edit')}}?id=" + calEvent.id
+            window.location = "{{ url_for('wcal.workout_edit')}}" + calEvent.id
         },
         eventDrop: function (event, revertFunc) {
-            window.location = "{{ url_for('workout_calendar.event_copy')}}?id=" + event.id + "&new_start=" + event.start.format()
+            window.location = "{{ url_for('wcal.workout_copy')}}" + event.id + "/?new_start=" + event.start.format()
 
         }
 
