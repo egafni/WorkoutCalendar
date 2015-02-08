@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% from "_macros.html" import render_field %}
 
-{% block content %}
+{% block main %}
     <p>
     <ul class="breadcrumb">
         <li><a href="{{ url_for('.index') }}">Home</a></li>
@@ -13,6 +13,8 @@
             {% for field in form %}
                 {% if field.type == 'TextAreaField' %}
                     {{ render_field(field, class="ckeditor") }}
+                {% elif field.type == 'Select' %}
+                    {{ render_field(field, class="select2") }}
                 {% else %}
                     {{ render_field(field) }}
                 {% endif %}
@@ -29,6 +31,5 @@
 
         </p>
     </form>
-
 {% endblock %}
 

@@ -1,37 +1,35 @@
 {% extends "layout.html" %}
-{% block content %}
-
-
-<div id='calendar'></div>
-
-
+{% block main %}
+    <div id='calendar'></div>
 {% endblock %}
 
-{%block script %}
-<script type="text/javascript">
-    // Calendar
+{% block scripts %}
+    {{ super() }}
+    <script type="text/javascript">
+        // Calendar
 
-    $('#calendar').fullCalendar({
-        editable: true,
-        dragOpacity:{'default':.9},
-        eventSources: [
-            { url: "{{ url_for('wcal.events')}}",
-                error: function () {
-                    alert('there was an error while fetching events!');
+        $('#calendar').fullCalendar({
+            editable: true,
+            dragOpacity: {'default': .9},
+            eventSources: [
+                {
+                    url: "{{ url_for('wcal.events')}}",
+                    error: function () {
+                        alert('there was an error while fetching events!');
+                    }
                 }
+            ],
+            dayClick: function (date, allDay, jsEvent, view) {
+                window.location = "{{ url_for('wcal.workout_add' ) }}?start=" + date.format()
+            },
+            eventClick: function (calEvent, jsEvent, view) {
+                window.location = "{{ url_for('wcal.workout_edit')}}" + calEvent.id
+            },
+            eventDrop: function (event, revertFunc) {
+                window.location = "{{ url_for('wcal.workout_copy')}}" + event.id + "/?new_start=" + event.start.format()
+
             }
-        ],
-        dayClick: function (date, allDay, jsEvent, view) {
-            window.location = "{{ url_for('wcal.workout_add' ) }}?start=" + date.format()
-        },
-        eventClick: function (calEvent, jsEvent, view) {
-            window.location = "{{ url_for('wcal.workout_edit')}}" + calEvent.id
-        },
-        eventDrop: function (event, revertFunc) {
-            window.location = "{{ url_for('wcal.workout_copy')}}" + event.id + "/?new_start=" + event.start.format()
 
-        }
-
-    })
-</script>
-{%endblock%}
+        })
+    </script>
+{% endblock %}

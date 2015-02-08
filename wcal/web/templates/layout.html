@@ -1,128 +1,129 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
-
-    <title>Workout Calendar</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="{{ url_for('wcal.static', filename='bootstrap3/css/bootstrap.css') }}" rel="stylesheet">
-    <link href="{{ url_for('wcal.static', filename='datatables/assets/css/datatables.css') }}" rel="stylesheet">
-    <link href="{{ url_for('wcal.static', filename='bootstrap3/css/bootstrap-responsive.css') }}" rel="stylesheet">
-    <link href="{{ url_for('wcal.static', filename='custom.css') }}" rel="stylesheet">
-    <link href="{{ url_for('wcal.static', filename='fullcalendar/fullcalendar.css') }}" rel="stylesheet">
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- select2 -->
-    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-beta.3/css/select2.min.css" />
-
-</head>
-
-<body>
-
-<!-- Fixed navbar -->
-<div class="navbar navbar-default">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">Workout Calendar</a>
-        </div>
-        <div class="navbar-collapse collapse">
-            <p class="navbar-text navbar-right">:)</p>
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="{{ url_for('wcal.movement_index') }}">Movements</a></li>
-                <li><a href="{{ url_for('wcal.movement_add') }}">Add Movement</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Links <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">x</a></li>
-                        <li class="divider"></li>
-                        <li class="dropdown-header">name</li>
-                        <li><a tabindex="-1" href="#"
-                               target="_blank">x</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        <!--/.nav-collapse -->
-    </div>
-</div>
-
-{% with messages = get_flashed_messages() %}
-{% for message in messages %}
-<div class="alert alert-warning alert-dismissable">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    {{ message }}
-</div>
-{% endfor %}
-{% endwith %}
-
-
-<div class="container">
-    {% block content %}
-
-    {% endblock %}
-</div>
-
-
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src={{ url_for('wcal.static', filename='ckeditor/ckeditor.js') }}></script>
-<script src="{{ url_for('wcal.static', filename='fullcalendar/lib/jquery.min.js') }}"></script>
-<script src="{{ url_for('wcal.static', filename='fullcalendar/lib/jquery-ui.custom.min.js') }}"></script>
-<script src="{{ url_for('wcal.static', filename='moment.min.js') }}"></script>
-<script src="{{ url_for('wcal.static', filename='fullcalendar/fullcalendar.js') }}"></script>
-<script src="{{ url_for('wcal.static', filename='bootstrap3/js/bootstrap.min.js') }}"></script>
-<script src="{{ url_for('wcal.static', filename='jquery.dataTables.min.js') }}"></script>
-<script src="{{ url_for('wcal.static', filename='datatables/assets/js/datatables.js') }}"></script>
-
-<!--<script src="{{ url_for('wcal.static', filename='jquery.ui.touch-punch.min.js') }}"></script>-->
-
-<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-beta.3/js/select2.min.js"></script>
-<script type="text/javascript">
-
-    $(document).ready(function () {
-        $('.datatable').dataTable({
-            "sPaginationType": "bs_normal",
-            "bLengthChange": false,
-            "iDisplayLength": 25
-        });
-        $('.datatable').each(function () {
-            var datatable = $(this);
-            // SEARCH - Add the placeholder for Search and Turn this into in-line form control
-            var search_input = datatable.closest('.dataTables_wrapper').find('div[id$=_filter] input');
-            search_input.attr('placeholder', 'Search');
-            search_input.addClass('form-control input-sm');
-            // LENGTH - Inline-Form control
-            var length_sel = datatable.closest('.dataTables_wrapper').find('div[id$=_length] select');
-            length_sel.addClass('form-control input-sm');
-            datatable.bind('page', function (e) {
-                window.console && console.log('pagination event:', e) //this event must be fired whenever you paginate
-            });
-        });
-
-        // Select2
-        $('select').select2();
-    });
-</script>
-{% block script %}
+{% extends "bootstrap/base.html" %}
+{% block title %}
+    Workout Calendar
 {% endblock %}
-<footer>
-</footer>
-</body>
-</html>
+
+{% import "bootstrap/fixes.html" as fixes %}
+{% block head %}
+    {{ super() }}
+    {{ fixes.ie8() }}
+{% endblock %}
+
+{% block styles %}
+    {{ super() }}
+
+    <!--
+    <link href="{{ url_for('wcal.static', filename='datatables/assets/css/datatables.css') }}" rel="stylesheet">
+    <link href="{{ url_for('wcal.static', filename='custom.css') }}" rel="stylesheet">
+
+    -->
+    <link href="{{ url_for('wcal.static', filename='fullcalendar/fullcalendar.css') }}" rel="stylesheet">
+	<link rel="stylesheet" href="//select2.github.io/select2/select2-3.5.2/select2.css">
+{% endblock %}
+
+{% block navbar %}
+    <div class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Workout Calendar</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <p class="navbar-text navbar-right">:)</p>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="{{ url_for('wcal.movement_index') }}">Movements</a></li>
+                    <li><a href="{{ url_for('wcal.movement_add') }}">Add Movement</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Links <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">x</a></li>
+                            <li class="divider"></li>
+                            <li class="dropdown-header">name</li>
+                            <li><a tabindex="-1" href="#"
+                                   target="_blank">x</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+                <div class="alert alert-warning alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+    </div>
+
+    <div class="container">
+
+        {% block main %}
+        {% endblock %}
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!--<script src={{ url_for('wcal.static', filename='ckeditor/ckeditor.js') }}></script>
+    <script src="{{ url_for('wcal.static', filename='fullcalendar/lib/jquery.min.js') }}"></script>
+    <script src="{{ url_for('wcal.static', filename='fullcalendar/lib/jquery-ui.custom.min.js') }}"></script>
+    <script src="{{ url_for('wcal.static', filename='moment.min.js') }}"></script>
+    <script src="{{ url_for('wcal.static', filename='fullcalendar/fullcalendar.js') }}"></script>
+
+    <script src="{{ url_for('wcal.static', filename='jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('wcal.static', filename='datatables/assets/js/datatables.js') }}"></script>
+    <script src="{{ url_for('wcal.static', filename='jquery.ui.touch-punch.min.js') }}"></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-beta.3/js/select2.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    -->
+    <script src="{{ url_for('wcal.static', filename='fullcalendar/lib/jquery.min.js') }}"></script>
+    <script src="{{ url_for('wcal.static', filename='fullcalendar/lib/jquery-ui.custom.min.js') }}"></script>
+    <script src="{{ url_for('wcal.static', filename='moment.min.js') }}"></script>
+    <script src="{{ url_for('wcal.static', filename='fullcalendar/fullcalendar.js') }}"></script>
+
+    <script src="//select2.github.io/select2/select2-3.4.2/select2.js"></script>  <!-- bootstrap3 comaptibility -->
+    <script src={{ url_for('wcal.static', filename='ckeditor/ckeditor.js') }}></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+        /*
+            $('.datatable').dataTable({
+                "sPaginationType": "bs_normal",
+                "bLengthChange": false,
+                "iDisplayLength": 25
+            });
+            $('.datatable').each(function () {
+                var datatable = $(this);
+                // SEARCH - Add the placeholder for Search and Turn this into in-line form control
+                var search_input = datatable.closest('.dataTables_wrapper').find('div[id$=_filter] input');
+                search_input.attr('placeholder', 'Search');
+                search_input.addClass('form-control input-sm');
+                // LENGTH - Inline-Form control
+                var length_sel = datatable.closest('.dataTables_wrapper').find('div[id$=_length] select');
+                length_sel.addClass('form-control input-sm');
+                datatable.bind('page', function (e) {
+                    window.console && console.log('pagination event:', e) //this event must be fired whenever you paginate
+                });
+            });
+        */
+            // Select2
+            $('select').select2({ placeholder: "Select an Exercise", maximumSelectionSize: 0 } );
+        });
+    </script>
+{% endblock %}

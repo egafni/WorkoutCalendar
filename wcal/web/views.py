@@ -91,7 +91,7 @@ def workout_delete(id):
 # EDIT
 @bprint.route('/movement/<int:id>')
 def movement(id):
-    return edit(Movement, id)
+    return edit(Movement, MovementForm, id)
 
 
 @bprint.route('/workout/edit/<int:id>/', methods=['POST', 'GET'])
@@ -99,18 +99,24 @@ def movement(id):
 def workout_edit(id=None):
     if id is None:
         id = request.get['id']
-    return edit(Workout, id)
+    return edit(Workout, WorkoutForm, id)
 
 
-def edit(Model, id):
-    workout = session.query(Model).get(id)
-    form = WorkoutForm(request.form, obj=workout)
+def edit(Model, Form, id):
+    instance = session.query(Model).get(id)
+    form = Form(request.form, obj=instance)
+
+    #form.movements.choices = [('a','b')]
     if request.method == 'POST' and form.validate():
+        #populate instance
         for field in form:
-            print 'SET %s %s'
-            setattr(workout, field.label.text, field.data)
+            name = field.label.text
+            data = field.data
+            if name in ['movements']: #TODO this is a hack, should actually check if is a relationship
+                data = session.query(Movement).filter(Movement.id.in_(map(int, data))).all()
+            setattr(instance, name, data)
         session.commit()
-        flash('Updated %s' % workout)
+        flash('Updated %s' % instance)
         return redirect(url_for("wcal.index"))
     else:
         return render_template("edit.html", form=form, id=id)

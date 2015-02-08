@@ -1,11 +1,14 @@
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
+from flask_bootstrap import Bootstrap
 
 flask_app = Flask(__name__, static_folder='web/static')
 flask_app.config['DEBUG'] = True
 flask_app.config['SECRET_KEY'] = 'ASDFASFSD'
 flask_app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/erik/wcal.sqlite'
 flask_app.config['SQLALCHEMY_ECHO'] = True
+Bootstrap(flask_app)
+
 db = SQLAlchemy(flask_app)
 session = db.session
 
