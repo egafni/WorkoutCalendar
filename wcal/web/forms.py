@@ -10,7 +10,7 @@
 #
 #     exclude = ['created_on']
 
-from wtforms import StringField, TextAreaField
+from wtforms import StringField, TextAreaField, SelectMultipleField
 from wtforms import validators
 from wtforms import Form
 
@@ -21,6 +21,7 @@ from wtforms import Form
 class WorkoutForm(Form):
     start = StringField('start', validators=[validators.DataRequired()])
     name = StringField('name', validators=[validators.DataRequired()])
+    exercises = SelectMultipleField('exercises', choices=[('asdf','asdf'), ('dfgfg','dfgdfg')])
     text = TextAreaField('text')
 
 class MovementForm(Form):
