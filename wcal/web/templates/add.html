@@ -11,7 +11,13 @@
     <form method="POST" action=".">
         <dl class="dl-horizontal">
             {% for field in form %}
-                {{ render_field(field, class="ckeditor") }}
+                {% if field.type == 'TextAreaField' %}
+                    {{ render_field(field, class="ckeditor") }}
+                {% elif field.type == 'Select' %}
+                    {{ render_field(field, class="select2") }}
+                {% else %}
+                    {{ render_field(field) }}
+                {% endif %}
             {% endfor %}
         </dl>
 

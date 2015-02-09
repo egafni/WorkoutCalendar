@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+{% from "_macros.html" import render_field %}
+
+{% block main %}
+    <p>
+    <ul class="breadcrumb">
+        <li><a href="{{ url_for('.index') }}">Home</a></li>
+        <li class="active">Edit Workout Session</li>
+    </ul>
+
+    <form method="POST" action="{{ url_for('wcal.workout_edit',id=id) }}">
+        <dl class="dl-horizontal">
+            {{ render_field(form._fields['name']) }}
+            {{ render_field(form._fields['start']) }}
+            <dt>Work
+            </dt>
+            <dd>
+                <table>
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Tempo</th>
+                        <th>Amount</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for form in work_forms %}
+                        <tr>
+                            {% for field in form %}
+                                <td>
+                                    {{ field()|safe }}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td colspan="3" style="text-align:right">
+                            <span href="#" class="btn btn-default" id="add_work">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </dd>
+
+            {{ render_field(form._fields['notes'], class="ckeditor") }}
+        </dl>
+
+        <button type="submit" class="btn btn-default">
+            <span class="glyphicon glyphicon-pencil"></span> Update
+        </button>
+        <a href="{{ url_for('wcal.workout_delete', id=id) }}" onclick="return confirm('Are you sure?');">
+            <button type="button" class="btn btn-default btn-small">
+                <span class="glyphicon glyphicon-remove"></span> Delete
+            </button>
+        </a>
+
+        </p>
+    </form>
+{% endblock %}
+
+{% block scripts %}
+
+    {{ super() }}
+    <script type="text/javascript">
+        $("#add_work").click(
+                function () {
+                    var someText = "my dynamic text";
+                    var newDiv = $("<div>").append(someText);
+                    $(this).append(newDiv);
+                }
+        )
+    </script>
+{% endblock %}

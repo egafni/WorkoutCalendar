@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% from "_macros.html" import render_field %}
+
+{% block main %}
+
+    <ul class="breadcrumb">
+        <li><a href="{{ url_for('.index') }}">Home</a></li>
+        <li class="active">Workout</li>
+    </ul>
+    <p>
+
+        <a href="{{ url_for('wcal.workout_edit', id=id) }}" onclick="return confirm('Are you sure?');">
+            <button type="button" class="btn btn-default btn-small">
+                <span class="glyphicon glyphicon-remove"></span> Delete
+            </button>
+        </a>
+
+        {% for ex in movements %}
+            <a href="{{ ex.url }}">{{ ex }}</a> <br/>
+        {% endfor %}
+    </p>
+
+{% endblock %}

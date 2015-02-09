@@ -1,4 +1,4 @@
-#from distutils.core import setup
+# from distutils.core import setup
 from setuptools import find_packages, setup
 
 setup(
@@ -12,9 +12,9 @@ setup(
     maintainer="Erik Gafni",
     maintainer_email="egafni@gmail.com",
     license="GPLv2",
-    install_requires=["flask","sqlalchemy","flask-sqlalchemy","wtforms","python-dateutil" ],
+    install_requires=["flask", "flask-bootstrap", "flask-failsafe", "sqlalchemy", "flask-sqlalchemy", "wtforms",
+                      "python-dateutil", "flask-admin", "python-dateutil"],
     scripts=["bin/wcal"],
-    data_files=[('etc', ['etc/example_excludes'])],
     # Packaging Instructions
     packages=find_packages(),
     include_package_data=True

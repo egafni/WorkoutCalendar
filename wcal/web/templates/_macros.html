@@ -1,16 +1,33 @@
 {% macro render_field(field) %}
-{% if field.label.text != 'Csrf Token' %}
-<dt>{{ field.label }}
-<dd>{{ field(**kwargs)|safe }}
-    {% if field.errors %}
-    <ul class=errors>
-        {% for error in field.errors %}
-        <li>{{ error }}</li>
-        {% endfor %}
-    </ul>
+    {% if field.label.text != 'Csrf Token' %}
+        <dt>{{ field.label.text|title }}
+        <dd>{{ field(**kwargs)|safe }}
+            {% if field.errors %}
+                <ul class=errors>
+                    {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </dd>
+    {% else %}
+        {{ field(**kwargs)|safe }}
     {% endif %}
-</dd>
-{% else %}
-{{ field(**kwargs)|safe }}
-{% endif %}
+{% endmacro %}
+
+{% macro render_field2(field) %}
+    {% if field.label.text != 'Csrf Token' %}
+        <dt>{{ field.label }}
+        <dd>{{ field(**kwargs)|safe }}
+            {% if field.errors %}
+                <ul class=errors>
+                    {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </dd>
+    {% else %}
+        {{ field(**kwargs)|safe }}
+    {% endif %}
 {% endmacro %}

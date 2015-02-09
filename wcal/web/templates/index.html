@@ -5,6 +5,12 @@
 
 {% block scripts %}
     {{ super() }}
+    {% block jquery %}
+        <script src="{{ url_for('wcal.static', filename='fullcalendar/lib/jquery.min.js') }}"></script>
+        <script src="{{ url_for('wcal.static', filename='fullcalendar/lib/jquery-ui.custom.min.js') }}"></script>
+        <script src="{{ url_for('wcal.static', filename='moment.min.js') }}"></script>
+        <script src="{{ url_for('wcal.static', filename='fullcalendar/fullcalendar.js') }}"></script>
+    {% endblock %}
     <script type="text/javascript">
         // Calendar
 

@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% from "_macros.html" import render_field %}
+
+{% block main %}
+    <p>
+    <ul class="breadcrumb">
+        <li><a href="{{ url_for('.index') }}">Home</a></li>
+        <li class="active">Edit Workout Session</li>
+    </ul>
+
+    <form method="POST" action="{{ url_for('wcal.movement_edit',id=id) }}">
+        <dl class="dl-horizontal">
+            {% include "movement/form.html" %}
+        </dl>
+        <button type="submit" class="btn btn-default">
+            <span class="glyphicon glyphicon-pencil"></span> Update
+        </button>
+        <a href="{{ url_for('wcal.workout_delete', id=id) }}" onclick="return confirm('Are you sure?');">
+            <button type="button" class="btn btn-default btn-small">
+                <span class="glyphicon glyphicon-remove"></span> Delete
+            </button>
+        </a>
+
+        </p>
+    </form>
+{% endblock %}
+

@@ -13,9 +13,9 @@
     {{ super() }}
 
     <link href="//cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="{{ url_for('wcal.static', filename='custom.css') }}" rel="stylesheet">
     <link href="{{ url_for('wcal.static', filename='fullcalendar/fullcalendar.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="//select2.github.io/select2/select2-3.5.2/select2.css">
-    <link href="{{ url_for('wcal.static', filename='custom.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block navbar %}
@@ -73,10 +73,26 @@
 
 {% block scripts %}
     {{ super() }}
-    {% block jquery %}
-
-    {% endblock %}
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+    <!--<script src={{ url_for('wcal.static', filename='ckeditor/ckeditor.js') }}></script>
+    <script src="{{ url_for('wcal.static', filename='fullcalendar/lib/jquery.min.js') }}"></script>
+    <script src="{{ url_for('wcal.static', filename='fullcalendar/lib/jquery-ui.custom.min.js') }}"></script>
+    <script src="{{ url_for('wcal.static', filename='moment.min.js') }}"></script>
+    <script src="{{ url_for('wcal.static', filename='fullcalendar/fullcalendar.js') }}"></script>
+
+    <script src="{{ url_for('wcal.static', filename='jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('wcal.static', filename='jquery.ui.touch-punch.min.js') }}"></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-beta.3/js/select2.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    -->
+    <script src="{{ url_for('wcal.static', filename='fullcalendar/lib/jquery.min.js') }}"></script>
+    <script src="{{ url_for('wcal.static', filename='fullcalendar/lib/jquery-ui.custom.min.js') }}"></script>
+    <script src="{{ url_for('wcal.static', filename='moment.min.js') }}"></script>
+    <script src="{{ url_for('wcal.static', filename='fullcalendar/fullcalendar.js') }}"></script>
+
     <script src="//select2.github.io/select2/select2-3.4.2/select2.js"></script>  <!-- bootstrap3 comaptibility -->
     <script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
     <script src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
@@ -87,19 +103,19 @@
                 "bLengthChange": false,
                 "iDisplayLength": 25
             })
-            {#            $('.datatable').each(function () {#}
-            {#                var datatable = $(this);#}
-            {#                // SEARCH - Add the placeholder for Search and Turn this into in-line form control#}
-            {#                var search_input = datatable.closest('.dataTables_wrapper').find('div[id$=_filter] input');#}
-            {#                search_input.attr('placeholder', 'Search');#}
-            {#                search_input.addClass('form-control input-sm');#}
-            {#                // LENGTH - Inline-Form control#}
-            {#                var length_sel = datatable.closest('.dataTables_wrapper').find('div[id$=_length] select');#}
-            {#                length_sel.addClass('form-control input-sm');#}
-            {#                datatable.bind('page', function (e) {#}
-            {#                    window.console && console.log('pagination event:', e) //this event must be fired whenever you paginate#}
-            {#                });#}
-            {#            });#}
+{#            $('.datatable').each(function () {#}
+{#                var datatable = $(this);#}
+{#                // SEARCH - Add the placeholder for Search and Turn this into in-line form control#}
+{#                var search_input = datatable.closest('.dataTables_wrapper').find('div[id$=_filter] input');#}
+{#                search_input.attr('placeholder', 'Search');#}
+{#                search_input.addClass('form-control input-sm');#}
+{#                // LENGTH - Inline-Form control#}
+{#                var length_sel = datatable.closest('.dataTables_wrapper').find('div[id$=_length] select');#}
+{#                length_sel.addClass('form-control input-sm');#}
+{#                datatable.bind('page', function (e) {#}
+{#                    window.console && console.log('pagination event:', e) //this event must be fired whenever you paginate#}
+{#                });#}
+{#            });#}
 
             // Select2
             function format(state) {

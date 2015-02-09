@@ -15,7 +15,6 @@ session = db.session
 db = db
 session = session
 
-
 def reset_db():
     db.drop_all()
     db.create_all()

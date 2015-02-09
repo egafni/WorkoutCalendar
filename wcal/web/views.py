@@ -4,10 +4,13 @@ import datetime
 from flask import request, render_template, Blueprint, flash, redirect, url_for
 import dateutil.parser
 
-from ..models import Workout, Movement
-from .forms import WorkoutForm, MovementForm
+from ..models import Workout, Movement, Work
+from .forms import WorkoutForm, MovementForm, WorkForm
 from ..app import session
+from . import admin
 
+
+admin = admin
 
 bprint = Blueprint('wcal', __name__, template_folder='templates', static_folder='static')
 
@@ -25,7 +28,7 @@ def events():
     return json.dumps(data)
 
 
-@bprint.route('/movement_index')
+@bprint.route('/movement/')
 def movement_index():
     movements = session.query(Movement).all()
     return render_template('movement/index.html', movements=movements)
@@ -34,12 +37,15 @@ def movement_index():
 @bprint.route('/movement/add/', methods=['POST', 'GET'])
 def movement_add():
     print request.environ['REQUEST_METHOD']
-    return generic_add(MovementForm(request.form), Movement)
+    form = MovementForm(request.form)
+    return generic_add(form, Movement)
 
 
 @bprint.route('/workout/add/', methods=['GET', 'POST'])
 def workout_add():
     form = WorkoutForm(request.form)
+    form.movements.query = session.query(Movement)
+
     if request.method == 'GET':
         assert 'start' in request.args
         start = request.args.get('start')
@@ -73,6 +79,7 @@ def workout_copy(id=None):
     for c in source_workout.__table__.c:
         if c.name not in ['id', 'start', 'created_on']:
             setattr(new_workout, c.name, getattr(source_workout, c.name))
+    new_workout.work = source_workout.work
 
     session.add(new_workout)
     session.commit()
@@ -89,9 +96,22 @@ def workout_delete(id):
 
 
 # EDIT
-@bprint.route('/movement/<int:id>')
-def movement(id):
-    return edit(Movement, MovementForm, id)
+@bprint.route('/movement/edit/<int:id>/', methods=['POST', 'GET'])
+def movement_edit(id):
+    return edit(Movement, MovementForm, id, 'movement/edit.html')
+
+
+def edit(Model, Form, id, template):
+    instance = session.query(Model).get(id)
+    form = Form(request.form, obj=instance)
+
+    if request.method == 'POST' and form.validate():
+        form.populate_obj(instance)
+        session.commit()
+        flash('Updated %s' % instance)
+        return redirect(url_for("wcal.index"))
+    else:
+        return render_template(template, form=form, id=id)
 
 
 @bprint.route('/workout/edit/<int:id>/', methods=['POST', 'GET'])
@@ -99,24 +119,18 @@ def movement(id):
 def workout_edit(id=None):
     if id is None:
         id = request.get['id']
-    return edit(Workout, WorkoutForm, id)
+    # return edit(Workout, WorkoutForm, id, 'workout/edit.html')
 
+    workout = session.query(Workout).get(id)
+    form = WorkoutForm(request.form, obj=workout)
+    work_forms = [WorkForm(prefix='work_0_'), WorkForm(prefix='work_0_')]
 
-def edit(Model, Form, id):
-    instance = session.query(Model).get(id)
-    form = Form(request.form, obj=instance)
-
-    #form.movements.choices = [('a','b')]
     if request.method == 'POST' and form.validate():
-        #populate instance
-        for field in form:
-            name = field.label.text
-            data = field.data
-            if name in ['movements']: #TODO this is a hack, should actually check if is a relationship
-                data = session.query(Movement).filter(Movement.id.in_(map(int, data))).all()
-            setattr(instance, name, data)
+        form.populate_obj(workout)
         session.commit()
-        flash('Updated %s' % instance)
+        flash('Updated %s' % workout)
         return redirect(url_for("wcal.index"))
     else:
-        return render_template("edit.html", form=form, id=id)
+        return render_template('workout/edit.html', form=form, work_forms=work_forms, id=id)
+
+

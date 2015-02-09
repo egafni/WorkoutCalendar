@@ -9,3 +9,18 @@
   width: 100%;
 }
 
+
+.select2-container .select2-choice {
+    height: 55px;
+    width: 300px;
+
+}
+
+dd {
+    margin:5px;
+}
+
+td, th {
+    padding-right:5px;
+    padding-bottom:5px
+}
